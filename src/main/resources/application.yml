@@ -1,0 +1,25 @@
+spring:
+
+  application:
+    name: GreenBuy
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/GreenBuy
+    username: postgres
+    password: "sql"
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    #      ddl-auto: none
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  main:
+    allow-circular-references: true
+server:
+  port: 8080
+
