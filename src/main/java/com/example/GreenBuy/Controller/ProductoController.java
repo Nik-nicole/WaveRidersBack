@@ -15,7 +15,6 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
@@ -36,42 +35,24 @@ public class ProductoController {
         List<Producto> productos = productoService.findAll();
         List<ProductoDTO> productoDTOs = productos.stream()
                 .map(this::convertToDTO)
-                .toList(); // Asegúrate de que estás usando Java 11 o superior para esta sintaxis
+                .toList(); // Ensure you're using Java 11 or higher for this syntax
         return ResponseEntity.ok(productoDTOs);
     }
 
-
     @PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> createProducto(@RequestBody Map<String, Object> json) {
+    public ResponseEntity<Map<String, Object>> createProducto(@RequestBody ProductoDTO productoDTO) {
         Map<String, Object> response = new HashMap<>();
         try {
-            ProductoDTO productoDTO = new ProductoDTO();
-
-            // Extraer datos directamente del Map
-            productoDTO.setNameProducto((String) json.get("name_producto"));
-            productoDTO.setPrecio((Integer) json.get("precio"));
+            // Set creation and update timestamps
 
 
-            // Convertir fecha de String a LocalDate
-            String fechaVencimientoStr = (String) json.get("fecha_vencimiento");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate fechaVencimiento = LocalDate.parse(fechaVencimientoStr, formatter);
-            productoDTO.setFechaVencimiento(fechaVencimiento);
-
-            // Configurar fecha de creación y actualización
-            productoDTO.setCreatedAt(LocalDateTime.now());
-            productoDTO.setUpdatedAt(LocalDateTime.now());
-
-            // Convertir DTO a entidad
+            // Convert DTO to entity
             Producto producto = convertToEntity(productoDTO);
             productoService.save(producto);
 
             response.put("message", "Producto creado exitosamente");
             response.put("producto", productoDTO);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (DateTimeParseException e) {
-            response.put("message", "Error de formato en la fecha: " + e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
             response.put("message", "Error procesando la solicitud: " + e.getMessage());
@@ -80,7 +61,7 @@ public class ProductoController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateProducto(@PathVariable Long id, @RequestBody Map<String, Object> json) {
+    public ResponseEntity<Map<String, Object>> updateProducto(@PathVariable Long id, @RequestBody ProductoDTO productoDTO) {
         Map<String, Object> response = new HashMap<>();
         try {
             Producto producto = productoService.getById(id);
@@ -88,31 +69,17 @@ public class ProductoController {
                 return ResponseEntity.notFound().build();
             }
 
-            ProductoDTO productoDTO = new ProductoDTO();
-            productoDTO.setNameProducto((String) json.get("name_producto"));
-            productoDTO.setPrecio((Integer) json.get("precio"));
-            productoDTO.setImagen((String) json.get("imagen"));
+            // Update timestamps and other fields
 
-            // Convertir fecha de String a LocalDate
-            String fechaVencimientoStr = (String) json.get("fecha_vencimiento");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate fechaVencimiento = LocalDate.parse(fechaVencimientoStr, formatter);
-            productoDTO.setFechaVencimiento(fechaVencimiento);
 
-            // Actualizar fechas de creación y modificación
-            productoDTO.setCreatedAt(producto.getCreatedAt()); // Mantener la fecha de creación original
-            productoDTO.setUpdatedAt(LocalDateTime.now()); // Actualizar la fecha de modificación
-
-            // Convertir DTO a entidad y actualizar
+            // Convert DTO to entity and update
             producto = convertToEntity(productoDTO);
+            producto.setId(id); // Ensure the ID is set for the update
             productoService.save(producto);
 
             response.put("message", "Producto actualizado exitosamente");
             response.put("producto", productoDTO);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (DateTimeParseException e) {
-            response.put("message", "Error de formato en la fecha: " + e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
             response.put("message", "Error procesando la solicitud: " + e.getMessage());
@@ -131,14 +98,15 @@ public class ProductoController {
         }
     }
 
-    // Métodos de conversión de DTO a entidad y viceversa
+    // Conversion methods
     private Producto convertToEntity(ProductoDTO productoDTO) {
         Producto producto = new Producto();
         producto.setNameProducto(productoDTO.getNameProducto());
         producto.setPrecio(productoDTO.getPrecio());
-        producto.setCreatedAt(productoDTO.getCreatedAt());
-        producto.setUpdatedAt(productoDTO.getUpdatedAt());
-        // Puedes agregar otras propiedades como la categoría o lotes si lo deseas
+        producto.setLote(productoDTO.getLote());
+        producto.setCantidad(productoDTO.getCantidad());
+        producto.setFechavencimiento(productoDTO.getFechaVencimiento());
+
         return producto;
     }
 
@@ -146,9 +114,10 @@ public class ProductoController {
         ProductoDTO productoDTO = new ProductoDTO();
         productoDTO.setNameProducto(producto.getNameProducto());
         productoDTO.setPrecio(producto.getPrecio());
-        productoDTO.setCreatedAt(producto.getCreatedAt());
-        productoDTO.setUpdatedAt(producto.getUpdatedAt());
-        // Asegúrate de incluir la fecha de vencimiento aquí si corresponde
+        productoDTO.setLote(producto.getLote());
+        productoDTO.setCantidad(producto.getCantidad());
+        productoDTO.setFechaVencimiento(producto.getFechavencimiento());
+
         return productoDTO;
     }
 }

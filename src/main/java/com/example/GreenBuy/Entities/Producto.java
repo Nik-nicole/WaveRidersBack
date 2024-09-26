@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List; // Importa la clase List
 
@@ -29,6 +30,9 @@ public class Producto {
     @Column(name = "precio")
     private Integer precio;
 
+    @Column(name = "Lote")
+    private Integer lote;
+
     @Column(name = "cantidad", length = 255)
     private Integer cantidad;
 
@@ -36,14 +40,9 @@ public class Producto {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
-    private List<Lote> lotes;
+    @Column(name = "fecha_ven")
+    private LocalDate Fechavencimiento;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     // Getters and setters
 }

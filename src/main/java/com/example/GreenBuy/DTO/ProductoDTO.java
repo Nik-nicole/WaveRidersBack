@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public class ProductoDTO {
     private String nameProducto;
     private Integer precio;
-    private String imagen;
+    private Integer lote;
+    private Integer cantidad;
     private LocalDate fechaVencimiento; // Asegúrate de que este campo esté presente
-    private LocalDateTime createdAt;    // Añadir este campo
-    private LocalDateTime updatedAt;    // Añadir este campo
+        // Añadir este campo
 }
