@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductoDTO {
+
+    private Long id;
     private String nameProducto;
     private Integer precio;
     private Integer lote;

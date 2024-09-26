@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
@@ -87,7 +87,7 @@ public class ProductoController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
         Producto producto = productoService.getById(id);
         if (producto != null) {
