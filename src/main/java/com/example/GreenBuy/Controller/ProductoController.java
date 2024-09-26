@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
@@ -30,7 +31,7 @@ public class ProductoController {
         return producto != null ? ResponseEntity.ok(convertToDTO(producto)) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ProductoDTO>> findAll() {
         List<Producto> productos = productoService.findAll();
         List<ProductoDTO> productoDTOs = productos.stream()
@@ -49,7 +50,7 @@ public class ProductoController {
             // Extraer datos directamente del Map
             productoDTO.setNameProducto((String) json.get("name_producto"));
             productoDTO.setPrecio((Integer) json.get("precio"));
-            productoDTO.setImagen((String) json.get("imagen"));
+
 
             // Convertir fecha de String a LocalDate
             String fechaVencimientoStr = (String) json.get("fecha_vencimiento");
@@ -135,7 +136,6 @@ public class ProductoController {
         Producto producto = new Producto();
         producto.setNameProducto(productoDTO.getNameProducto());
         producto.setPrecio(productoDTO.getPrecio());
-        producto.setImagen(productoDTO.getImagen());
         producto.setCreatedAt(productoDTO.getCreatedAt());
         producto.setUpdatedAt(productoDTO.getUpdatedAt());
         // Puedes agregar otras propiedades como la categoría o lotes si lo deseas
@@ -146,7 +146,6 @@ public class ProductoController {
         ProductoDTO productoDTO = new ProductoDTO();
         productoDTO.setNameProducto(producto.getNameProducto());
         productoDTO.setPrecio(producto.getPrecio());
-        productoDTO.setImagen(producto.getImagen());
         productoDTO.setCreatedAt(producto.getCreatedAt());
         productoDTO.setUpdatedAt(producto.getUpdatedAt());
         // Asegúrate de incluir la fecha de vencimiento aquí si corresponde

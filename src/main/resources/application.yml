@@ -1,12 +1,12 @@
 spring:
 
   application:
-    name: GreenBuy
+    name: Greenbuy
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/GreenBuy
+    url: jdbc:postgresql://localhost:5432/Greenbuy
     username: postgres
-    password: "sql"
+    password: 2607
     driver-class-name: org.postgresql.Driver
 
   jpa:

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.time.LocalDateTime;
 import java.util.List; // Importa la clase List
@@ -13,6 +14,7 @@ import java.util.List; // Importa la clase List
 @Entity
 @Table(name = "productos")
 @Getter
+@CrossOrigin(origins = "http://localhost:5174")
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,9 +28,6 @@ public class Producto {
 
     @Column(name = "precio")
     private Integer precio;
-
-    @Column(name = "imagen", length = 255)
-    private String imagen;
 
     @Column(name = "cantidad", length = 255)
     private Integer cantidad;
